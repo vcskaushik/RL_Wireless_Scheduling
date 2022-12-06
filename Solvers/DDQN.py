@@ -19,7 +19,7 @@ import tensorflow as tf
 tf.compat.v1.disable_v2_behavior()
 
 
-class DQN(AbstractSolver):
+class DDQN(AbstractSolver):
     def __init__(self,env,options):
         assert (str(env.action_space).startswith('Discrete') or
         str(env.action_space).startswith('Tuple(Discrete')), str(self) + " cannot handle non-discrete action spaces"
@@ -172,7 +172,7 @@ class DQN(AbstractSolver):
 
 
     def __str__(self):
-        return "DQN"
+        return "DDQN"
 
     def plot(self,stats):
         plotting.plot_episode_stats(stats,plt_name="DDQN2")

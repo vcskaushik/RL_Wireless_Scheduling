@@ -29,7 +29,6 @@ class DQN(AbstractSolver):
         self.memory = deque(maxlen=options.replay_memory_size)
 
     def _build_model(self):
-        layers = self.options.layers
 
         channel_state = Input(shape=(self.env.nT,2))
         power_buffer_state = Input(shape=(3,))
@@ -116,11 +115,10 @@ class DQN(AbstractSolver):
                 #  Compute the target value    #
                 ################################
                 q_val = self.model.predict(state)[0]
-                action2 = np.argmax(q_val)
                 if done:
                     q = reward
                 else:
-                    q = reward + (self.options.gamma* self.target_model.predict(next_state)[0][action2])
+                    q = reward + (self.options.gamma* np.max(self.target_model.predict(next_state)[0]))
                 q_val[action] = q
                 target_q.append(q_val)
             channel_states = np.concatenate(channel_states,axis=0)
@@ -175,7 +173,7 @@ class DQN(AbstractSolver):
         return "DQN"
 
     def plot(self,stats):
-        plotting.plot_episode_stats(stats,plt_name="DDQN2")
+        plotting.plot_episode_stats(stats,plt_name="DQN")
 
     def create_greedy_policy(self):
         """
